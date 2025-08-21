@@ -119,7 +119,7 @@ Firefox >= 65
 Edge >= 79
 
 📄 License
-This project is open source and available under the MIT License.
+This project is open source and available under the Apache 2.0 License.
 
 🙋 FAQ
 Q: Does this connect to real GST or bank APIs?
@@ -139,4 +139,5 @@ Built with ❤️ for the hackathon by [Muzammil Ali Baig/Team FinMark].
 
 
 BharatCash Shield: Because every minute, and every business, counts. 🇮🇳
+
 
