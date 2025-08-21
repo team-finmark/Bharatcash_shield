@@ -1,0 +1,31 @@
+{
+  "companies": [
+    {
+      "id": 1,
+      "name": "Sharma Electronics",
+      "revenue_last_3_months": [950000, 870000, 820000],
+      "debt": 1200000,
+      "gstCompliance": 92,
+      "employeeCount": 15,
+      "location": "Delhi"
+    },
+    {
+      "id": 2,
+      "name": "Patel Textiles",
+      "revenue_last_3_months": [1800000, 1500000, 900000],
+      "debt": 5000000,
+      "gstCompliance": 67,
+      "employeeCount": 20,
+      "location": "Surat"
+    },
+    {
+      "id": 3,
+      "name": "Shinde Fabrics",
+      "revenue_last_3_months": [750000, 780000, 800000],
+      "debt": 600000,
+      "gstCompliance": 95,
+      "employeeCount": 8,
+      "location": "Mumbai"
+    }
+  ]
+}

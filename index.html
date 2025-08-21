@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BharatCash Shield - AI-Powered MSME Protection</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Boxicons for icons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- TensorFlow.js for AI -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <style>
+        body {
+            transition: background-color 0.5s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .hidden {
+            display: none;
+        }
+        .pulse-alert {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .risk-meter {
+            transition: all 0.5s ease;
+        }
+        .company-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .company-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Siren animation */
+        @keyframes sirenFlash {
+            0% { background-color: rgba(255, 0, 0, 0.1); }
+            50% { background-color: rgba(255, 0, 0, 0.3); }
+            100% { background-color: rgba(255, 0, 0, 0.1); }
+        }
+        .siren-active {
+            animation: sirenFlash 1s infinite;
+        }
+        /* Audio controls styling */
+        #siren-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 0, 0, 0.2);
+        }
+        #siren-volume {
+            width: 100px;
+        }
+        /* WhatsApp simulation styles */
+        .whatsapp-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .whatsapp-modal-content {
+            background-color: white;
+            width: 90%;
+            max-width: 450px;
+            border-radius: 15px;
+            overflow: hidden;
+            animation: modalFade 0.3s;
+        }
+        @keyframes modalFade {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .whatsapp-modal-header {
+            background: #128C7E;
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .whatsapp-modal-body {
+            padding: 25px;
+            text-align: center;
+        }
+        .whatsapp-modal-footer {
+            padding: 20px;
+            display: flex;
+            justify-content: flex-end;
+            border-top: 1px solid #eee;
+        }
+        .status-indicator {
+            display: flex;
+            justify-content: center;
+            margin: 25px 0;
+        }
+        .status-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #ddd;
+            margin: 0 6px;
+        }
+        .status-dot.active {
+            background: #25D366;
+            animation: pulse 1.5s infinite;
+        }
+        .success-checkmark {
+            font-size: 60px;
+            color: #25D366;
+            margin: 20px 0;
+        }
+        .privacy-badge {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header Section -->
+    <header class="bg-blue-800 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <i class='bx bx-shield-alt text-4xl mr-3'></i>
+                    <div>
+                        <h1 class="text-3xl font-bold">BharatCash Shield</h1>
+                        <p class="text-blue-200">AI-Powered MSME Financial Protection</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="bg-blue-700 px-3 py-1 rounded-full text-sm">
+                        <i class='bx bx-time-five mr-1'></i> Real-time Analysis
+                    </div>
+                    <div class="bg-blue-700 px-3 py-1 rounded-full text-sm">
+                        <i class='bx bx-lock-alt mr-1'></i> 100% Secure
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main App Container -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Protecting India's MSMEs from Financial Crisis</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Using AI to predict cash flow crises 90 days early. Zero servers. Pure AI in your browser.
+            </p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                <i class='bx bx-building-house text-4xl text-blue-600 mb-3'></i>
+                <h3 class="text-2xl font-bold text-gray-800">63 Million</h3>
+                <p class="text-gray-600">Indian MSMEs Protected</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                <i class='bx bx-rupee text-4xl text-green-600 mb-3'></i>
+                <h3 class="text-2xl font-bold text-gray-800">₹1.2 Crore</h3>
+                <p class="text-gray-600">Average Value Saved per Intervention</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                <i class='bx bx-line-chart-down text-4xl text-red-600 mb-3'></i>
+                <h3 class="text-2xl font-bold text-gray-800">90 Days</h3>
+                <p class="text-gray-600">Early Warning System</p>
+            </div>
+        </div>
+
+        <!-- Company Selection -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Select an MSME to Analyze</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="company-cards">
+                <!-- Company cards will be loaded here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Dashboard (Initially Hidden) -->
+        <div id="dashboard" class="hidden">
+            <!-- AI Prediction Result -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">AI Risk Assessment</h2>
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div class="w-full md:w-2/3 mb-4 md:mb-0">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-green-600">Low Risk</span>
+                            <span class="text-sm font-medium text-red-600">High Risk</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div id="risk-bar" class="h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="text-center md:text-right">
+                        <span id="risk-score" class="text-3xl font-bold">--</span>
+                        <p class="text-sm text-gray-600">Probability of Crisis</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-4 text-center">Revenue Trend (Last 3 Months)</h3>
+                    <canvas id="revenue-chart"></canvas>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold mb-4 text-center">Debt vs Revenue Analysis</h3>
+                    <canvas id="debt-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Key Financial Metrics</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="financial-metrics">
+                    <!-- Metrics will be loaded here by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Red Alert Section (Initially Hidden) -->
+            <div id="red-alert" class="bg-red-50 border-l-4 border-red-500 rounded-lg p-6 mb-8 hidden pulse-alert">
+                <div class="flex items-start">
+                    <i class='bx bx-error-alt text-3xl text-red-600 mr-4 mt-1'></i>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-red-800 mb-2">RED ALERT: CRISIS DETECTED</h3>
+                        <p class="text-red-700 mb-4">This company has a very high risk of bankruptcy. Immediate intervention is required.</p>
+                        
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-red-800 mb-2">Recommended Actions:</h4>
+                            <ul class="list-disc list-inside text-red-700">
+                                <li>Apply for an MSME Samadhan Loan</li>
+                                <li>Consult a Chartered Accountant for debt restructuring</li>
+                                <li>Negotiate payment terms with key suppliers</li>
+                                <li>Implement immediate cost reduction measures</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <button id="whatsapp-alert-btn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center">
+                                <i class='bx bxl-whatsapp text-xl mr-2'></i> Send Alert via WhatsApp
+                            </button>
+                            <button id="siren-btn" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center">
+                                <i class='bx bx-alarm-exclamation text-xl mr-2'></i> Play Siren
+                            </button>
+                            <button id="stop-siren-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center hidden">
+                                <i class='bx bx-stop-circle text-xl mr-2'></i> Stop Siren
+                            </button>
+                        </div>
+
+                        <!-- Siren controls -->
+                        <div id="siren-controls" class="hidden">
+                            <label for="siren-volume" class="text-red-700 text-sm">Volume:</label>
+                            <input type="range" id="siren-volume" min="0" max="1" step="0.1" value="0.7" class="slider">
+                            <span id="volume-value" class="text-red-700 text-sm">70%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Intervention Success Simulation -->
+            <div id="intervention-success" class="bg-green-50 border-l-4 border-green-500 rounded-lg p-6 mb-8 hidden">
+                <div class="flex items-start">
+                    <i class='bx bx-check-circle text-3xl text-green-600 mr-4 mt-1'></i>
+                    <div>
+                        <h3 class="text-xl font-bold text-green-800 mb-2">INTERVENTION SUCCESSFUL</h3>
+                        <p class="text-green-700 mb-2">With early detection and proper intervention, this business can be saved!</p>
+                        <p class="text-green-700 font-semibold">Estimated value preserved: <span id="saved-value">₹1.2 Crore</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mt-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">How BharatCash Shield Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class='bx bx-data text-3xl text-blue-600'></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Data Analysis</h3>
+                    <p class="text-sm text-gray-600">AI analyzes financial patterns and trends</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class='bx bx-brain text-3xl text-blue-600'></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">AI Prediction</h3>
+                    <p class="text-sm text-gray-600">TensorFlow.js model predicts bankruptcy risk</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class='bx bx-alarm-exclamation text-3xl text-blue-600'></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Early Warning</h3>
+                    <p class="text-sm text-gray-600">Get alerts 90 days before crisis</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class='bx bx-chat text-3xl text-blue-600'></i>
+                    </div>
+                    <h3 class="font-semibold mb-2">Take Action</h3>
+                    <p class="text-sm text-gray-600">Share alerts and implement solutions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>BharatCash Shield - Protecting India's Economic Backbone</p>
+            <p class="text-gray-400 text-sm mt-2">Powered by TensorFlow.js • 100% Client-Side • Zero Data Transmission</p>
+        </div>
+    </footer>
+    
+    <!-- WhatsApp Simulation Modals -->
+    <!-- Sending Simulation Modal -->
+    <div class="whatsapp-modal" id="whatsapp-sending-modal">
+        <div class="whatsapp-modal-content">
+            <div class="whatsapp-modal-header">
+                <span>📱</span>
+                <h2>Sending via WhatsApp</h2>
+            </div>
+            <div class="whatsapp-modal-body">
+                <div class="status-indicator">
+                    <div class="status-dot active" id="whatsapp-dot-1"></div>
+                    <div class="status-dot" id="whatsapp-dot-2"></div>
+                    <div class="status-dot" id="whatsapp-dot-3"></div>
+                </div>
+                <p id="whatsapp-status-text">Preparing your message...</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div class="whatsapp-modal" id="whatsapp-success-modal">
+        <div class="whatsapp-modal-content">
+            <div class="whatsapp-modal-header">
+                <span>📱</span>
+                <h2>Message Sent Successfully</h2>
+            </div>
+            <div class="whatsapp-modal-body">
+                <div class="success-checkmark">✓</div>
+                <p>Your message was sent successfully in this simulation.</p>
+                <div class="privacy-badge">Privacy Protected</div>
+            </div>
+            <div class="whatsapp-modal-footer">
+                <button class="btn bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg" id="whatsapp-close-success">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Global variables
+        let companyData = [];
+        let revenueChart, debtChart;
+        let model;
+        let sirenAudio = null;
+        let isSirenPlaying = false;
+
+        // DOM Elements
+        const companyCardsContainer = document.getElementById('company-cards');
+        const dashboard = document.getElementById('dashboard');
+        const riskScoreElement = document.getElementById('risk-score');
+        const riskBar = document.getElementById('risk-bar');
+        const redAlertSection = document.getElementById('red-alert');
+        const interventionSuccess = document.getElementById('intervention-success');
+        const financialMetricsContainer = document.getElementById('financial-metrics');
+        const whatsappButton = document.getElementById('whatsapp-alert-btn');
+        const sirenButton = document.getElementById('siren-btn');
+        const stopSirenButton = document.getElementById('stop-siren-btn');
+        const sirenControls = document.getElementById('siren-controls');
+        const sirenVolume = document.getElementById('siren-volume');
+        const volumeValue = document.getElementById('volume-value');
+        
+        // WhatsApp simulation elements
+        const whatsappSendingModal = document.getElementById('whatsapp-sending-modal');
+        const whatsappSuccessModal = document.getElementById('whatsapp-success-modal');
+        const whatsappCloseSuccess = document.getElementById('whatsapp-close-success');
+        const whatsappStatusText = document.getElementById('whatsapp-status-text');
+        const whatsappDots = [
+            document.getElementById('whatsapp-dot-1'),
+            document.getElementById('whatsapp-dot-2'),
+            document.getElementById('whatsapp-dot-3')
+        ];
+
+        // Sample MSME Data
+        const sampleData = {
+            "companies": [
+                {
+                    "id": 1,
+                    "name": "Sharma Electronics",
+                    "revenue_last_3_months": [950000, 870000, 820000],
+                    "debt": 1200000,
+                    "gstCompliance": 92,
+                    "employeeCount": 15,
+                    "location": "Delhi",
+                    "industry": "Retail Electronics",
+                    "yearsInBusiness": 8
+                },
+                {
+                    "id": 2,
+                    "name": "Patel Textiles",
+                    "revenue_last_3_months": [1800000, 1500000, 900000],
+                    "debt": 5000000,
+                    "gstCompliance": 67,
+                    "employeeCount": 20,
+                    "location": "Surat",
+                    "industry": "Textile Manufacturing",
+                    "yearsInBusiness": 12
+                },
+                {
+                    "id": 3,
+                    "name": "Shinde Fabrics",
+                    "revenue_last_3_months": [750000, 780000, 800000],
+                    "debt": 600000,
+                    "gstCompliance": 95,
+                    "employeeCount": 8,
+                    "location": "Mumbai",
+                    "industry": "Textile Wholesale",
+                    "yearsInBusiness": 5
+                }
+            ]
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCompanyData();
+            createModel();
+            initSiren();
+            initWhatsAppSimulation();
+            
+            // Add click event listeners
+            whatsappButton.addEventListener('click', sendWhatsAppAlert);
+            sirenButton.addEventListener('click', playSiren);
+            stopSirenButton.addEventListener('click', stopSiren);
+            sirenVolume.addEventListener('input', updateSirenVolume);
+            
+            // Enable audio on first user interaction
+            document.body.addEventListener('click', function enableAudio() {
+                // This is just to get user interaction for audio playback
+                document.body.removeEventListener('click', enableAudio);
+            }, { once: true });
+        });
+
+        // Initialize the WhatsApp simulation
+        function initWhatsAppSimulation() {
+            // Close success modal
+            whatsappCloseSuccess.addEventListener('click', function() {
+                whatsappSuccessModal.style.display = 'none';
+            });
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === whatsappSendingModal) {
+                    whatsappSendingModal.style.display = 'none';
+                    clearInterval(window.whatsappAnimationInterval);
+                }
+                if (event.target === whatsappSuccessModal) {
+                    whatsappSuccessModal.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize the siren audio
+        function initSiren() {
+            // Use an actual siren audio file from your assets folder
+            sirenAudio = new Audio('assets/siren.mp3');
+            sirenAudio.loop = true;
+            sirenAudio.volume = 0.7;
+            
+            // Add event listeners for audio errors
+            sirenAudio.addEventListener('error', function(e) {
+                console.error('Error loading siren audio:', e);
+                alert('Siren audio file could not be loaded. Please check the file path.');
+            });
+        }
+
+        // Update siren volume based on slider
+        function updateSirenVolume() {
+            if (sirenAudio) {
+                sirenAudio.volume = parseFloat(sirenVolume.value);
+                volumeValue.textContent = Math.round(sirenAudio.volume * 100) + '%';
+            }
+        }
+
+        // Play the siren sound
+        function playSiren() {
+            if (sirenAudio && !isSirenPlaying) {
+                sirenAudio.play()
+                    .then(() => {
+                        isSirenPlaying = true;
+                        document.body.classList.add('siren-active');
+                        sirenButton.classList.add('hidden');
+                        stopSirenButton.classList.remove('hidden');
+                        sirenControls.classList.remove('hidden');
+                    })
+                    .catch(error => {
+                        console.log("Siren play failed, may require user interaction first:", error);
+                        alert("Please click anywhere on the page first to enable sound, then try again.");
+                    });
+            }
+        }
+
+        // Stop the siren sound
+        function stopSiren() {
+            if (sirenAudio && isSirenPlaying) {
+                sirenAudio.pause();
+                sirenAudio.currentTime = 0;
+                isSirenPlaying = false;
+                document.body.classList.remove('siren-active');
+                sirenButton.classList.remove('hidden');
+                stopSirenButton.classList.add('hidden');
+                sirenControls.classList.add('hidden');
+            }
+        }
+
+        // Load company data
+        async function loadCompanyData() {
+            // In a real app, you would fetch this from a JSON file
+            // For this demo, we're using the sampleData object directly
+            companyData = sampleData.companies;
+            renderCompanyCards(companyData);
+        }
+
+        // Render company cards
+        function renderCompanyCards(companies) {
+            companyCardsContainer.innerHTML = '';
+            
+            companies.forEach(company => {
+                const avgRevenue = company.revenue_last_3_months.reduce((a, b) => a + b, 0) / 3;
+                const riskIndicator = company.debt > avgRevenue * 3 ? 'High Risk' : 'Stable';
+                
+                const card = document.createElement('div');
+                card.className = 'company-card bg-white rounded-lg shadow-md p-4 border-l-4';
+                card.classList.add(riskIndicator === 'High Risk' ? 'border-orange-500' : 'border-green-500');
+                card.innerHTML = `
+                    <h3 class="text-xl font-semibold">${company.name}</h3>
+                    <p class="text-gray-600">${company.industry} • ${company.location}</p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-sm ${riskIndicator === 'High Risk' ? 'text-orange-600' : 'text-green-600'}">
+                            ${riskIndicator}
+                        </span>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm analyze-btn" data-id="${company.id}">
+                            Analyze
+                        </button>
+                    </div>
+                `;
+                
+                companyCardsContainer.appendChild(card);
+            });
+            
+            // Add event listeners to all analyze buttons
+            document.querySelectorAll('.analyze-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const companyId = parseInt(this.getAttribute('data-id'));
+                    const company = companyData.find(c => c.id === companyId);
+                    if (company) {
+                        showDashboard(company);
+                    }
+                });
+            });
+        }
+
+        // Show dashboard with company data
+        async function showDashboard(company) {
+            dashboard.classList.remove('hidden');
+            
+            // Use the REAL AI prediction
+            const realRiskScore = await predictRisk(company);
+            updateRiskMeter(realRiskScore);
+            updateRevenueChart(company);
+            updateDebtChart(company);
+            updateFinancialMetrics(company);
+            checkForRedAlert(realRiskScore, company);
+            
+            // Scroll to dashboard
+            dashboard.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Create a simple TensorFlow.js model
+        async function createModel() {
+            // For a real application, you would load a pre-trained model
+            // For this demo, we'll create a simple model
+            model = tf.sequential();
+            model.add(tf.layers.dense({ units: 10, activation: 'relu', inputShape: [3] }));
+            model.add(tf.layers.dense({ units: 1, activation: 'sigmoid' }));
+            
+            model.compile({ optimizer: 'adam', loss: 'meanSquaredError' });
+            
+            // For demo purposes, we'll just use a simple calculation
+            console.log("Simple model created for demo purposes");
+        }
+
+        // Predict risk using our simple model
+        async function predictRisk(company) {
+            // In a real app, this would use the TensorFlow.js model
+            // For this demo, we'll use a simple calculation based on financial metrics
+            
+            const avgRevenue = company.revenue_last_3_months.reduce((a, b) => a + b, 0) / 3;
+            let risk = 0.2; // Base risk
+            
+            // Debt to revenue ratio
+            if (company.debt > avgRevenue * 4) risk += 0.4;
+            else if (company.debt > avgRevenue * 3) risk += 0.3;
+            else if (company.debt > avgRevenue * 2) risk += 0.2;
+            
+            // Revenue trend (last month vs first month)
+            const revenueTrend = (company.revenue_last_3_months[2] - company.revenue_last_3_months[0]) / company.revenue_last_3_months[0];
+            if (revenueTrend < -0.4) risk += 0.3;
+            else if (revenueTrend < -0.2) risk += 0.2;
+            else if (revenueTrend < 0) risk += 0.1;
+            
+            // GST compliance
+            if (company.gstCompliance < 70) risk += 0.2;
+            else if (company.gstCompliance < 80) risk += 0.1;
+            
+            // Ensure risk is between 0 and 1
+            return Math.min(Math.max(risk, 0), 1);
+        }
+
+        // Update the risk meter
+        function updateRiskMeter(score) {
+            const percentage = (score * 100).toFixed(1);
+            riskScoreElement.textContent = `${percentage}%`;
+            riskBar.style.width = `${percentage}%`;
+
+            // Change color based on risk
+            if (score > 0.85) {
+                riskBar.classList.remove('bg-yellow-500', 'bg-green-600');
+                riskBar.classList.add('bg-red-600');
+            } else if (score > 0.6) {
+                riskBar.classList.remove('bg-green-600', 'bg-red-600');
+                riskBar.classList.add('bg-yellow-500');
+            } else {
+                riskBar.classList.remove('bg-yellow-500', 'bg-red-600');
+                riskBar.classList.add('bg-green-600');
+            }
+        }
+
+        // Update revenue chart
+        function updateRevenueChart(company) {
+            const ctx = document.getElementById('revenue-chart').getContext('2d');
+            
+            // Destroy the old chart if it exists
+            if (revenueChart) {
+                revenueChart.destroy();
+            }
+            
+            revenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['3 Months Ago', '2 Months Ago', 'Last Month'],
+                    datasets: [{
+                        label: 'Monthly Revenue (₹)',
+                        data: company.revenue_last_3_months,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(1) + 'L';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update debt chart
+        function updateDebtChart(company) {
+            const ctx = document.getElementById('debt-chart').getContext('2d');
+            
+            // Destroy the old chart if it exists
+            if (debtChart) {
+                debtChart.destroy();
+            }
+            
+            const avgRevenue = company.revenue_last_3_months.reduce((a, b) => a + b, 0) / 3;
+            
+            debtChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Total Debt', 'Avg Monthly Revenue'],
+                    datasets: [{
+                        label: 'Amount (₹)',
+                        data: [company.debt, avgRevenue],
+                        backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(1) + 'L';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update financial metrics
+        function updateFinancialMetrics(company) {
+            const avgRevenue = company.revenue_last_3_months.reduce((a, b) => a + b, 0) / 3;
+            const revenueChange = ((company.revenue_last_3_months[2] - company.revenue_last_3_months[0]) / company.revenue_last_3_months[0]) * 100;
+            const debtToRevenueRatio = (company.debt / avgRevenue).toFixed(1);
+            
+            financialMetricsContainer.innerHTML = `
+                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                    <i class='bx bx-trending-down text-3xl ${revenueChange < 0 ? 'text-red-600' : 'text-green-600'} mb-2'></i>
+                    <h3 class="font-semibold">Revenue Trend</h3>
+                    <p class="text-2xl font-bold ${revenueChange < 0 ? 'text-red-600' : 'text-green-600'}">${revenueChange.toFixed(1)}%</p>
+                </div>
+                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                    <i class='bx bx-credit-card text-3xl ${debtToRevenueRatio > 3 ? 'text-red-600' : 'text-green-600'} mb-2'></i>
+                    <h3 class="font-semibold">Debt-to-Revenue</h3>
+                    <p class="text-2xl font-bold ${debtToRevenueRatio > 3 ? 'text-red-600' : 'text-green-600'}">${debtToRevenueRatio}x</p>
+                </div>
+                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                    <i class='bx bx-check-circle text-3xl ${company.gstCompliance < 80 ? 'text-red-600' : 'text-green-600'} mb-2'></i>
+                    <h3 class="font-semibold">GST Compliance</h3>
+                    <p class="text-2xl font-bold ${company.gstCompliance < 80 ? 'text-red-600' : 'text-green-600'}">${company.gstCompliance}%</p>
+                </div>
+            `;
+        }
+
+        // Check for red alert
+        function checkForRedAlert(riskScore, company) {
+            if (riskScore > 0.85) {
+                // SHOW THE ALERT
+                redAlertSection.classList.remove('hidden');
+                document.body.classList.add('bg-red-100');
+                
+                // HIDE success message if shown
+                interventionSuccess.classList.add('hidden');
+                
+                // Store current company for WhatsApp alert
+                redAlertSection.setAttribute('data-company', JSON.stringify(company));
+                
+                // Auto-play siren if not already playing
+                if (!isSirenPlaying) {
+                    setTimeout(playSiren, 500);
+                }
+                
+            } else {
+                // HIDE THE ALERT
+                redAlertSection.classList.add('hidden');
+                document.body.classList.remove('bg-red-100');
+                
+                // Show success message for lower risk companies
+                interventionSuccess.classList.remove('hidden');
+                
+                // Calculate saved value (for demo purposes)
+                const savedValue = (company.employeeCount * 600000 * 0.7).toLocaleString('en-IN');
+                document.getElementById('saved-value').textContent = `₹${savedValue}`;
+                
+                // Stop siren if playing
+                if (isSirenPlaying) {
+                    stopSiren();
+                }
+            }
+        }
+
+        // Function to show the WhatsApp sending animation
+        function showWhatsAppSendingAnimation() {
+            whatsappSendingModal.style.display = 'flex';
+            let dotIndex = 0;
+            
+            window.whatsappAnimationInterval = setInterval(() => {
+                whatsappDots.forEach(dot => dot.classList.remove('active'));
+                whatsappDots[dotIndex].classList.add('active');
+                dotIndex = (dotIndex + 1) % whatsappDots.length;
+            }, 300);
+            
+            // Simulate different stages of sending
+            setTimeout(() => {
+                whatsappStatusText.textContent = "Connecting securely...";
+            }, 1500);
+            
+            setTimeout(() => {
+                whatsappStatusText.textContent = "Sending message...";
+            }, 3000);
+            
+            setTimeout(() => {
+                clearInterval(window.whatsappAnimationInterval);
+                whatsappSendingModal.style.display = 'none';
+                showWhatsAppSuccessModal();
+            }, 4500);
+        }
+        
+        // Function to show WhatsApp success modal
+        function showWhatsAppSuccessModal() {
+            whatsappSuccessModal.style.display = 'flex';
+        }
+
+        // Send WhatsApp Alert (Simulation)
+        function sendWhatsAppAlert() {
+            const companyData = JSON.parse(redAlertSection.getAttribute('data-company'));
+            
+            // Instead of opening the real WhatsApp, show our simulation
+            showWhatsAppSendingAnimation();
+        }
+    </script>
+</body>
+</html>
