@@ -60,13 +60,13 @@ bharatcash-shield/
 Getting BharatCash Shield running is impossibly simple.
 
 Hosted Version (Recommended):
-Simply visit our live demo: https://your-username.github.io/Bharatcash_shield/
+Simply visit our live demo: https://team-finmark.github.io/Bharatcash_shield/
 
 Local Version:
 
 bash
 # 1. Clone the repository
-git clone https://github.com/your-username/Bharatcash_shield.git
+git clone https://github.com/team-finmark/Bharatcash_shield.git
 
 # 2. Navigate to the project folder
 cd bharatcash-shield
@@ -139,3 +139,4 @@ Built with ❤️ for the hackathon by [Muzammil Ali Baig/Team FinMark].
 
 
 BharatCash Shield: Because every minute, and every business, counts. 🇮🇳
+
